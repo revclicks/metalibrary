@@ -1,0 +1,9 @@
+{
+  "name": "meta-ads-library-extension",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Load extension from extension/dist in Chrome'",
+    "build": "echo 'Extension build placeholder'"
+  }
+}

@@ -1,0 +1,171 @@
+.meta-ads-saver-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #1877f2;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.meta-ads-saver-btn:hover {
+  background: #166fe5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.meta-ads-saver-btn.saved {
+  background: #22c55e;
+}
+
+.meta-ads-saver-btn.saved:hover {
+  background: #16a34a;
+}
+
+.meta-ads-saver-btn.saving {
+  background: #6b7280;
+  cursor: wait;
+}
+
+.meta-ads-saver-btn .spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.meta-ads-saver-actions {
+  position: absolute;
+  top: 8px;
+  right: 100px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 99;
+}
+
+*:hover > .meta-ads-saver-actions {
+  opacity: 1;
+}
+
+.meta-ads-saver-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.meta-ads-saver-action-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.meta-ads-saved-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #22c55e;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  z-index: 100;
+}
+
+.meta-ads-saver-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 999999;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.meta-ads-saver-toast.success { background: #22c55e; }
+.meta-ads-saver-toast.error { background: #ef4444; }
+.meta-ads-saver-toast.warning { background: #f59e0b; }
+
+.meta-ads-saver-toast.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Bulk select bar */
+.meta-ads-bulk-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #1a1a2e;
+  color: white;
+  font-size: 13px;
+  z-index: 999998;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+.meta-ads-bulk-bar button {
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.meta-ads-bulk-bar .save-all-btn {
+  background: #1877f2;
+  color: white;
+}
+
+.meta-ads-bulk-bar .cancel-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}

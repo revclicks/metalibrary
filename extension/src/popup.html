@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta Ads Library Saver</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <div class="logo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877f2" stroke="none">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>Ad Library Saver</span>
+      </div>
+    </div>
+
+    <!-- Login View -->
+    <div id="login-view" style="display:none">
+      <p class="subtitle">Sign in to start saving ads</p>
+      <div class="form-group">
+        <input type="email" id="email" placeholder="Email" />
+      </div>
+      <div class="form-group">
+        <input type="password" id="password" placeholder="Password" />
+      </div>
+      <button id="login-btn" class="btn-primary">Sign In</button>
+      <p class="link-text">
+        No account? <a href="http://localhost:3002/auth/signup" target="_blank">Sign up</a>
+      </p>
+      <div id="login-error" class="error" style="display:none"></div>
+    </div>
+
+    <!-- Main View -->
+    <div id="main-view" style="display:none">
+      <div class="user-bar">
+        <span id="user-name"></span>
+        <button id="logout-btn" class="btn-small">Sign Out</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-value" id="total-ads">0</span>
+          <span class="stat-label">Saved</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="total-folders">0</span>
+          <span class="stat-label">Folders</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="total-tags">0</span>
+          <span class="stat-label">Tags</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Recent Saves</h3>
+        <div id="recent-saves"></div>
+      </div>
+
+      <div class="actions">
+        <a href="http://localhost:3002/dashboard" target="_blank" class="btn-primary">
+          Open Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "meta-ads-library-saver",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd dashboard && npm run dev",
+    "build": "cd dashboard && npm run build",
+    "dev:ext": "cd extension && npm run dev",
+    "build:ext": "cd extension && npm run build"
+  }
+}

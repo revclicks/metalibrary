@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String?
+  passwordHash  String?
+  avatarUrl     String?
+  plan          String   @default("free")
+  googleId      String?  @unique
+  teamId        String?
+  role          String   @default("admin")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  team          Team?    @relation(fields: [teamId], references: [id])
+  ads           Ad[]
+  folders       Folder[]
+  tags          Tag[]
+  notes         Note[]
+  annotations   Annotation[]
+  savedFilters  SavedFilter[]
+  activities    Activity[]
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members   User[]
+  folders   Folder[]
+}
+
+model Ad {
+  id              String   @id @default(uuid())
+  adLibraryId     String?  @unique
+  advertiserName  String
+  pageId          String?
+  format          String   @default("image")
+  status          String   @default("active")
+  primaryText     String?
+  headline        String?
+  description     String?
+  ctaType         String?
+  destinationUrl  String?
+  displayUrl      String?
+  creativeUrl     String?
+  videoUrl        String?
+  screenshotUrl   String?
+  platforms       String?
+  countries       String?
+  adStartDate     DateTime?
+  adEndDate       DateTime?
+  starred         Boolean  @default(false)
+  savedAt         DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  savedById       String
+  savedBy         User     @relation(fields: [savedById], references: [id])
+
+  carouselCards   CarouselCard[]
+  adTags          AdTag[]
+  adFolders       AdFolder[]
+  notes           Note[]
+  annotations     Annotation[]
+
+  @@index([advertiserName])
+  @@index([savedById])
+  @@index([adLibraryId])
+}
+
+model CarouselCard {
+  id          String  @id @default(uuid())
+  adId        String
+  position    Int
+  imageUrl    String?
+  headline    String?
+  description String?
+  url         String?
+
+  ad          Ad      @relation(fields: [adId], references: [id], onDelete: Cascade)
+}
+
+model Folder {
+  id             String   @id @default(uuid())
+  name           String
+  parentFolderId String?
+  userId         String
+  teamId         String?
+  isSmart        Boolean  @default(false)
+  smartRules     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User     @relation(fields: [userId], references: [id])
+  team           Team?    @relation(fields: [teamId], references: [id])
+  parentFolder   Folder?  @relation("FolderTree", fields: [parentFolderId], references: [id])
+  subFolders     Folder[] @relation("FolderTree")
+  adFolders      AdFolder[]
+
+  @@index([userId])
+  @@index([parentFolderId])
+}
+
+model Tag {
+  id      String  @id @default(uuid())
+  name    String
+  color   String  @default("#6b7280")
+  group   String?
+  userId  String
+
+  user    User    @relation(fields: [userId], references: [id])
+  adTags  AdTag[]
+
+  @@unique([name, userId])
+  @@index([userId])
+}
+
+model AdTag {
+  id    String @id @default(uuid())
+  adId  String
+  tagId String
+
+  ad    Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([adId, tagId])
+}
+
+model AdFolder {
+  id       String @id @default(uuid())
+  adId     String
+  folderId String
+
+  ad       Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+  folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  @@unique([adId, folderId])
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  adId      String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ad        Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Annotation {
+  id        String   @id @default(uuid())
+  adId      String
+  userId    String
+  xPosition Float
+  yPosition Float
+  content   String
+  createdAt DateTime @default(now())
+
+  ad        Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model AdvertiserProfile {
+  id             String   @id @default(uuid())
+  pageId         String   @unique
+  name           String
+  totalAdsSaved  Int      @default(0)
+  lastChecked    DateTime?
+  isFollowed     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model SavedFilter {
+  id      String @id @default(uuid())
+  name    String
+  filters String
+  userId  String
+
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model AutoTagRule {
+  id        String @id @default(uuid())
+  name      String
+  condition String
+  tagName   String
+  userId    String
+  createdAt DateTime @default(now())
+}
+
+model Activity {
+  id         String   @id @default(uuid())
+  action     String
+  entityType String?
+  entityId   String?
+  metadata   String?
+  userId     String
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id])
+}
