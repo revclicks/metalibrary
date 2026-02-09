@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { requireAuth } from '@/lib/auth'
 import { exportSchema } from '@/lib/validations'
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {

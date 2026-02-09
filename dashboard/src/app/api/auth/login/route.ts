@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
 import { verifyPassword, generateToken } from '@/lib/auth'
 import { successResponse, errorResponse } from '@/lib/api'
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
