@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
         plan: user.plan,
       },
     }, 201)
-  } catch (error) {
-    console.error('Registration error:', error)
-    return errorResponse('Internal server error', 500)
+  } catch (error: any) {
+    console.error('Registration error:', error?.message, error?.code, error)
+    return errorResponse(`Internal server error: ${error?.message || 'unknown'}`, 500)
   }
 }

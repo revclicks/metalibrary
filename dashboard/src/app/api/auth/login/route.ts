@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
         plan: user.plan,
       },
     })
-  } catch (error) {
-    console.error('Login error:', error)
-    return errorResponse('Internal server error', 500)
+  } catch (error: any) {
+    console.error('Login error:', error?.message, error?.code, error)
+    return errorResponse(`Internal server error: ${error?.message || 'unknown'}`, 500)
   }
 }
