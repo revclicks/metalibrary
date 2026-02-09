@@ -10,11 +10,21 @@
   --danger: #ef4444;
   --success: #22c55e;
   --warning: #f59e0b;
+  --card: #ffffff;
+  --card-hover: #f9fafb;
+  --border: #e5e7eb;
+  --muted: #6b7280;
+  --input: #f3f4f6;
 }
 
 .dark {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --card: #1a1a2e;
+  --card-hover: #222240;
+  --border: #2d2d44;
+  --muted: #9ca3af;
+  --input: #1e1e36;
 }
 
 body {
