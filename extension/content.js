@@ -913,6 +913,9 @@ function extractAllAdData(card) {
  * The button is positioned at the top-right of the card.
  */
 function injectSaveButton(card, adId) {
+  // Skip if already has a save button
+  if (card.querySelector('.mals-save-btn')) return;
+
   // Ensure the card has relative positioning so we can absolute-position the button
   const currentPosition = window.getComputedStyle(card).position;
   if (currentPosition === 'static') {
@@ -996,6 +999,9 @@ async function handleSaveAd(card, btn) {
  * Inject a checkbox for bulk selection in each ad card.
  */
 function injectCheckbox(card, adId) {
+  // Skip if already has a checkbox
+  if (card.querySelector('.mals-checkbox-wrapper')) return;
+
   const wrapper = document.createElement('div');
   wrapper.className = 'mals-checkbox-wrapper';
 
