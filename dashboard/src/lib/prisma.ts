@@ -1,18 +1,24 @@
 let _prisma: any = null;
 
-function getPrisma() {
+export function getPrisma() {
   if (!_prisma) {
     const { PrismaClient } = require("@prisma/client");
-    _prisma = new PrismaClient();
+    const { PrismaPg } = require("@prisma/adapter-pg");
+
+    const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+    _prisma = new PrismaClient({ adapter });
   }
   return _prisma;
 }
 
-const prisma = new Proxy({} as any, {
-  get(_target, prop) {
-    return getPrisma()[prop];
-  },
-});
+const prisma: any = new Proxy(
+  {},
+  {
+    get(_target, prop) {
+      return getPrisma()[prop];
+    },
+  }
+);
 
 export { prisma };
 export default prisma;
