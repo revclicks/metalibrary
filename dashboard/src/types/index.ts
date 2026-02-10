@@ -144,6 +144,7 @@ export type Ad = {
   folders?: FolderType[]
   notes?: NoteType[]
   carouselCards?: CarouselCardType[]
+  _count?: { notes: number; carouselCards: number }
 }
 
 // Aliases for convenience
