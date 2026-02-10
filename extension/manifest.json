@@ -12,7 +12,8 @@
   "host_permissions": [
     "https://www.facebook.com/ads/library/*",
     "https://facebook.com/ads/library/*",
-    "http://localhost:3002/*"
+    "http://localhost:3002/*",
+    "https://metalibrary.vercel.app/*"
   ],
   "background": {
     "service_worker": "background.js",

@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3002/api'
+const API_BASE = 'https://metalibrary.vercel.app/api'
 
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -104,7 +104,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === 'open-dashboard') {
-    chrome.tabs.create({ url: 'http://localhost:3002/dashboard' })
+    chrome.tabs.create({ url: 'https://metalibrary.vercel.app/dashboard' })
     sendResponse({ success: true })
     return false
   }
