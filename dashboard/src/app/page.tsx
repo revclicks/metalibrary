@@ -9,6 +9,7 @@ import {
   Users,
   ArrowRight,
   Check,
+  Chrome,
 } from "lucide-react";
 import { useStore } from "@/store";
 
@@ -88,6 +89,15 @@ export default function HomePage() {
               className="flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-8 py-3.5 text-base font-semibold text-gray-700 transition-colors hover:border-indigo-300 hover:text-indigo-600"
             >
               Log In
+            </Link>
+          </div>
+          <div className="mt-6">
+            <Link
+              href="/extension"
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-indigo-200 bg-white px-6 py-3 text-sm font-semibold text-indigo-600 shadow-sm transition-all hover:border-indigo-400 hover:shadow-md"
+            >
+              <Chrome size={20} />
+              Install Chrome Extension
             </Link>
           </div>
           <p className="mt-4 text-sm text-gray-500">

@@ -26,7 +26,7 @@ export default function TagsPage() {
   const fetchTags = async () => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/tags", { headers: { Authorization: `Bearer ${token}` } });
-    if (res.ok) { const data = await res.json(); setTags(data.tags); }
+    if (res.ok) { const data = await res.json(); setTags(Array.isArray(data) ? data : data.tags || data.data || []); }
     setLoading(false);
   };
 

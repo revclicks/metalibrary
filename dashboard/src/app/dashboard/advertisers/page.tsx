@@ -49,15 +49,15 @@ export default function AdvertisersPage() {
             </div>
 
             <div className="grid grid-cols-3 gap-2 mb-3">
-              <div className="rounded-lg p-2 text-center" style={{ background: 'var(--sidebar-bg)' }}>
+              <div className="rounded-lg p-2 text-center" style={{ background: 'var(--card-hover)' }}>
                 <p className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>{adv.adCount}</p>
                 <p className="text-xs" style={{ color: 'var(--muted)' }}>Total</p>
               </div>
-              <div className="rounded-lg p-2 text-center" style={{ background: 'var(--sidebar-bg)' }}>
+              <div className="rounded-lg p-2 text-center" style={{ background: 'var(--card-hover)' }}>
                 <p className="text-lg font-bold text-green-500">{adv.activeAds}</p>
                 <p className="text-xs" style={{ color: 'var(--muted)' }}>Active</p>
               </div>
-              <div className="rounded-lg p-2 text-center" style={{ background: 'var(--sidebar-bg)' }}>
+              <div className="rounded-lg p-2 text-center" style={{ background: 'var(--card-hover)' }}>
                 <p className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>{adv.topFormat}</p>
                 <p className="text-xs" style={{ color: 'var(--muted)' }}>Top Format</p>
               </div>
@@ -66,13 +66,13 @@ export default function AdvertisersPage() {
             <div className="flex items-center gap-2">
               <button
                 className="flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-medium"
-                style={{ background: 'var(--sidebar-bg)', color: 'var(--foreground)' }}
+                style={{ background: 'var(--card-hover)', color: 'var(--foreground)' }}
               >
                 <Eye size={12} /> View Ads
               </button>
               <button
                 className="flex-1 flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-medium"
-                style={{ background: 'var(--sidebar-bg)', color: 'var(--foreground)' }}
+                style={{ background: 'var(--card-hover)', color: 'var(--foreground)' }}
               >
                 <ExternalLink size={12} /> Ad Library
               </button>
