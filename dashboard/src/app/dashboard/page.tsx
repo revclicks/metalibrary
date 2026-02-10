@@ -146,8 +146,6 @@ export default function DashboardPage() {
                 key={ad.id}
                 ad={ad as any}
                 onToggleStar={handleStar}
-                onSelect={handleSelect}
-                isSelected={selectedIds.has(ad.id)}
               />
             ))}
           </div>
