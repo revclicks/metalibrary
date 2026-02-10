@@ -36,8 +36,8 @@ export async function GET(
       ...ad,
       platforms: ad.platforms ? JSON.parse(ad.platforms) : [],
       countries: ad.countries ? JSON.parse(ad.countries) : [],
-      tags: ad.adTags.map((at) => at.tag),
-      folders: ad.adFolders.map((af) => af.folder),
+      tags: ad.adTags.map((at: any) => at.tag),
+      folders: ad.adFolders.map((af: any) => af.folder),
     })
   } catch (error) {
     if (error instanceof Error && error.message === 'Unauthorized') {
