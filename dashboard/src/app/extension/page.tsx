@@ -57,12 +57,12 @@ export default function ExtensionPage() {
 
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <a
-            href="https://github.com/nickg-24/MALT/releases"
-            target="_blank"
+            href="/meta-ads-saver-extension.zip"
+            download
             className="flex items-center gap-2 rounded-xl bg-indigo-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:bg-indigo-700"
           >
             <Download size={18} />
-            Download Extension
+            Download Extension (.zip)
           </a>
           <Link
             href="/"
