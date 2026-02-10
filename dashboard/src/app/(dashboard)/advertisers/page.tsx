@@ -1,236 +1,192 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import {
-  Building2,
-  Search,
-  ArrowUpDown,
-  Image as ImageIcon,
-  Video,
-  Layers,
-  Loader2,
-  TrendingUp,
-} from "lucide-react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useStore } from "@/store";
+import { Search, Heart, ExternalLink, Users, ArrowUpDown, SlidersHorizontal, Bookmark, Grid3X3 } from "lucide-react";
+import EmptyState from "@/components/ui/EmptyState";
 
-interface AdvertiserSummary {
-  name: string;
-  pageId: string | null;
+interface Advertiser {
+  advertiserName: string;
   adCount: number;
-  formats: Record<string, number>;
-  activeCount: number;
-  inactiveCount: number;
-  latestSavedAt: string;
+  activeAds: number;
+  topFormat: string;
+  lastSavedAt: string;
+  isFollowed?: boolean;
 }
 
 export default function AdvertisersPage() {
-  const token = useStore((s) => s.token);
-  const [advertisers, setAdvertisers] = useState<AdvertiserSummary[]>([]);
+  const [advertisers, setAdvertisers] = useState<Advertiser[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState<"adCount" | "name">("adCount");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
-  const fetchAdvertisers = useCallback(async () => {
-    if (!token) return;
-    try {
-      const res = await fetch("/api/advertisers", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setAdvertisers(data.data || data || []);
-      }
-    } catch {
-      console.error("Failed to fetch advertisers");
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
+  const [search, setSearch] = useState("");
+  const [sortAZ, setSortAZ] = useState(true);
 
   useEffect(() => {
+    const fetchAdvertisers = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("/api/advertisers", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setAdvertisers(Array.isArray(data) ? data : data.data || data.advertisers || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch advertisers:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchAdvertisers();
-  }, [fetchAdvertisers]);
+  }, []);
 
   const filtered = advertisers
-    .filter((a) =>
-      a.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortBy === "adCount") {
-        return sortOrder === "desc"
-          ? b.adCount - a.adCount
-          : a.adCount - b.adCount;
-      }
-      return sortOrder === "desc"
-        ? b.name.localeCompare(a.name)
-        : a.name.localeCompare(b.name);
-    });
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <Loader2 size={32} className="animate-spin text-indigo-500" />
-      </div>
-    );
-  }
+    .filter((a) => !search || a.advertiserName.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => sortAZ ? a.advertiserName.localeCompare(b.advertiserName) : b.advertiserName.localeCompare(a.advertiserName));
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Advertisers</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          {advertisers.length} advertiser
-          {advertisers.length !== 1 ? "s" : ""} tracked
-        </p>
+    <div className="flex flex-col h-full bg-white">
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100">
+            <Bookmark className="h-4 w-4 text-indigo-600" />
+          </div>
+          <h1 className="text-[15px] font-semibold text-gray-900">Swipe File</h1>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5">
+            <Search className="h-3.5 w-3.5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search keywords..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-48 bg-transparent text-sm outline-none text-gray-700 placeholder:text-gray-400"
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Search & Sort */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search
-            size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search advertisers..."
-            className="w-full rounded-lg border border-gray-300 py-2.5 pl-10 pr-4 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <select
-            value={sortBy}
-            onChange={(e) =>
-              setSortBy(e.target.value as "adCount" | "name")
-            }
-            className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-indigo-500"
-          >
-            <option value="adCount">Sort by Ad Count</option>
-            <option value="name">Sort by Name</option>
-          </select>
+      {/* Tab bar */}
+      <div className="flex items-center gap-6 px-6 border-b border-gray-100">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <Users className="h-4 w-4" />
+          My Ads
+        </Link>
+        <button
+          className="flex items-center gap-2 py-3 text-sm font-medium border-b-2 border-indigo-600 text-gray-900"
+        >
+          <Grid3X3 className="h-4 w-4" />
+          Brands
+        </button>
+      </div>
+
+      {/* Filter bar */}
+      <div className="flex items-center justify-between px-6 py-2.5 border-b border-gray-100">
+        <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+          <SlidersHorizontal className="h-3.5 w-3.5" />
+          Add Filter
+        </button>
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700">
+            <Heart className="h-3.5 w-3.5" />
+            Favorites
+          </button>
           <button
-            onClick={() =>
-              setSortOrder(sortOrder === "desc" ? "asc" : "desc")
-            }
-            className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+            onClick={() => setSortAZ(!sortAZ)}
+            className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700"
           >
-            <ArrowUpDown size={14} />
-            {sortOrder === "desc" ? "Desc" : "Asc"}
+            <ArrowUpDown className="h-3.5 w-3.5" />
+            {sortAZ ? "A-Z" : "Z-A"}
           </button>
         </div>
       </div>
 
-      {/* Advertisers Grid */}
-      {filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-16">
-          <Building2 size={48} className="text-gray-300" />
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">
-            No advertisers found
-          </h3>
-          <p className="mt-1 text-sm text-gray-500">
-            {searchQuery
-              ? "Try a different search term"
-              : "Save some ads to see advertisers here"}
-          </p>
-        </div>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((advertiser) => {
-            const total = advertiser.adCount;
-            const activeRatio =
-              total > 0
-                ? Math.round(
-                    (advertiser.activeCount / total) * 100
-                  )
-                : 0;
+      {/* Info bar */}
+      <div className="px-6 py-3 bg-gray-50 border-b border-gray-100">
+        <p className="text-sm text-gray-500 flex items-center gap-2">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 text-gray-400 text-xs">i</span>
+          Only brands whose ads you have saved will be displayed here.
+        </p>
+      </div>
 
-            return (
-              <Link
-                key={advertiser.name}
-                href={`/advertisers/${encodeURIComponent(
-                  advertiser.pageId || advertiser.name
-                )}`}
-                className="group rounded-xl border border-gray-200 bg-white p-6 transition-all hover:border-indigo-200 hover:shadow-md"
-              >
-                {/* Advertiser Name */}
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
-                    <Building2 size={20} />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-base font-semibold text-gray-900">
-                      {advertiser.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {total} ad{total !== 1 ? "s" : ""} saved
-                    </p>
-                  </div>
-                </div>
-
-                {/* Format Mini Chart */}
-                <div className="mt-4 flex gap-1">
-                  {Object.entries(advertiser.formats || {}).map(
-                    ([format, count]) => {
-                      const pct = total > 0 ? (count / total) * 100 : 0;
-                      const colors: Record<string, string> = {
-                        image: "#6366f1",
-                        video: "#ec4899",
-                        carousel: "#f59e0b",
-                        collection: "#22c55e",
-                      };
-                      return (
-                        <div
-                          key={format}
-                          className="h-2 rounded-full"
-                          style={{
-                            width: `${Math.max(pct, 5)}%`,
-                            backgroundColor: colors[format] || "#9ca3af",
-                          }}
-                          title={`${format}: ${count}`}
-                        />
-                      );
-                    }
-                  )}
-                </div>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {Object.entries(advertiser.formats || {}).map(
-                    ([format, count]) => (
-                      <span
-                        key={format}
-                        className="text-xs capitalize text-gray-500"
+      {/* Table */}
+      <div className="flex-1 overflow-auto">
+        {loading ? (
+          <div className="px-6 py-4 space-y-3">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3 animate-pulse">
+                <div className="h-9 w-9 rounded-full bg-gray-100" />
+                <div className="h-4 bg-gray-100 rounded w-32" />
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="p-12">
+            <EmptyState
+              icon={<Users className="w-8 h-8" />}
+              title={search ? "No brands found" : "No brands yet"}
+              description={search ? "Try a different search term." : "Save ads from the Meta Ads Library to see brands here."}
+            />
+          </div>
+        ) : (
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-100">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brands</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ads Saved</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Top Format</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((adv) => (
+                <tr key={adv.advertiserName} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-sm font-semibold text-white">
+                        {adv.advertiserName.charAt(0).toUpperCase()}
+                      </div>
+                      <span className="text-sm font-medium text-gray-900">{adv.advertiserName}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-3">
+                    <span className="text-sm text-gray-600">{adv.adCount}</span>
+                  </td>
+                  <td className="px-6 py-3">
+                    <span className="text-sm text-gray-500 capitalize">{adv.topFormat || '—'}</span>
+                  </td>
+                  <td className="px-6 py-3 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button className="p-1.5 text-gray-400 hover:text-red-400 transition-colors">
+                        <Heart className="h-4 w-4" />
+                      </button>
+                      <a
+                        href={`https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&q=${encodeURIComponent(adv.advertiserName)}`}
+                        target="_blank"
+                        className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-indigo-600 transition-colors"
                       >
-                        {format}: {count}
-                      </span>
-                    )
-                  )}
-                </div>
-
-                {/* Active/Inactive */}
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                    <span className="text-xs text-gray-600">
-                      {activeRatio}% active
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-gray-400">
-                    <TrendingUp size={12} />
-                    <span>
-                      {advertiser.activeCount} active /{" "}
-                      {advertiser.inactiveCount} inactive
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      )}
+                        Ad Library <ExternalLink className="h-3 w-3" />
+                      </a>
+                      <Link
+                        href={`/dashboard?advertiser=${encodeURIComponent(adv.advertiserName)}`}
+                        className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-indigo-600 transition-colors"
+                      >
+                        View Ads <ExternalLink className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
