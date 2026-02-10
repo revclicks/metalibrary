@@ -74,6 +74,8 @@ export default function AdGrid({
           key={ad.id}
           ad={ad}
           onToggleStar={onToggleStar}
+          onSelect={() => {}}
+          isSelected={false}
         />
       ))}
     </div>

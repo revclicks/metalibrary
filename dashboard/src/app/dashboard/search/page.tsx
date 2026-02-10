@@ -92,7 +92,7 @@ export default function SearchPage() {
           <>
             <p className="text-sm" style={{ color: "var(--muted)" }}>{total} results found</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {results.map((ad) => <AdCard key={ad.id} ad={ad} onToggleStar={() => {}} />)}
+              {results.map((ad) => <AdCard key={ad.id} ad={ad} onToggleStar={() => {}} onSelect={() => {}} isSelected={false} />)}
             </div>
           </>
         ) : (
