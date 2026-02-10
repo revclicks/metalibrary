@@ -20,6 +20,7 @@ import {
   LogOut,
   Menu,
   X,
+  Download,
   Layers,
 } from 'lucide-react'
 
@@ -159,6 +160,17 @@ export default function Sidebar() {
             </div>
           )}
         </nav>
+
+        {/* Download Extension */}
+        <div className="px-4 pb-3">
+          <Link
+            href="/extension"
+            className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors"
+          >
+            <Download className="h-4 w-4" />
+            Get Chrome Extension
+          </Link>
+        </div>
 
         {/* User section */}
         <div className="border-t border-gray-800 p-4">
